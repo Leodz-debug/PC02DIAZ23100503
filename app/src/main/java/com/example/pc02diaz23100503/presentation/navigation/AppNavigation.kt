@@ -6,6 +6,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.example.pc02diaz23100503.presentation.auth.LoginScreen
 import com.example.pc02diaz23100503.presentation.auth.LoginViewModel
+import com.example.pc02diaz23100503.presentation.auth.RegisterScreen
 import com.example.pc02diaz23100503.presentation.converter.ConverterScreen
 import com.example.pc02diaz23100503.presentation.history.HistoryScreen
 
@@ -20,6 +21,21 @@ fun AppNavigation(startDestination: String) {
                     navController.navigate(Routes.Home.route) {
                         popUpTo(Routes.Login.route) { inclusive = true }
                     }
+                },
+                onRegisterNavigate = {
+                    navController.navigate(Routes.Register.route)
+                }
+            )
+        }
+        composable(Routes.Register.route) {
+            RegisterScreen(
+                onRegisterSuccess = {
+                    navController.navigate(Routes.Login.route) {
+                        popUpTo(Routes.Register.route) { inclusive = true }
+                    }
+                },
+                onBackToLogin = {
+                    navController.popBackStack()
                 }
             )
         }
@@ -29,14 +45,24 @@ fun AppNavigation(startDestination: String) {
                     navController.navigate(Routes.Login.route) {
                         popUpTo(Routes.Home.route) { inclusive = true }
                     }
+                },
+                onNavigateToConverter = {
+                    navController.navigate(Routes.Converter.route)
+                },
+                onNavigateToHistory = {
+                    navController.navigate(Routes.History.route)
                 }
             )
         }
         composable(Routes.Converter.route) {
-            ConverterScreen()
+            ConverterScreen(
+                onBack = { navController.popBackStack() }
+            )
         }
         composable(Routes.History.route) {
-            HistoryScreen()
+            HistoryScreen(
+                onBack = { navController.popBackStack() }
+            )
         }
     }
 }

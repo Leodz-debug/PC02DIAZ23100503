@@ -21,6 +21,18 @@ class FirebaseAuthManager {
         }
     }
 
+    suspend fun register(email: String, password: String): Result<FirebaseUser> {
+        return try {
+            val result = auth.createUserWithEmailAndPassword(email, password).await()
+            result.user?.let {
+                auth.signOut() // No iniciar sesión automáticamente
+                Result.success(it)
+            } ?: Result.failure(Exception("Error al crear usuario"))
+        } catch (e: Exception) {
+            Result.failure(e)
+        }
+    }
+
     fun logout() {
         auth.signOut()
     }
